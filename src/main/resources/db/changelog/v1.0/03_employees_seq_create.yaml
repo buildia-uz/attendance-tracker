@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03_employees_seq_create
+      author: NedUmarov
+      changes:
+        - createSequence:
+            sequenceName: employees_seq
