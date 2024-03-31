@@ -1,11 +1,11 @@
 package uz.buildia.attendancetracker.service.impl;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import uz.buildia.attendancetracker.exception.EmployeeException;
 import uz.buildia.attendancetracker.model.constants.AttendanceStatus;
 import uz.buildia.attendancetracker.model.entity.AttendanceRecord;
 import uz.buildia.attendancetracker.model.entity.Employee;
@@ -26,9 +26,9 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
     private final AttendanceRecordRepository attendanceRecordRepository;
 
     @Override
-    public void saveAttendanceRecord(AttendanceRecordCreateRequest request) {
+    public void saveAttendanceRecord(AttendanceRecordCreateRequest request) throws EntityNotFoundException {
         Employee employee = employeeRepository.findByUsername(request.username())
-                .orElseThrow(EmployeeException::new);
+                .orElseThrow(EntityNotFoundException::new);
 
         LocalDateTime recordCreatedAt = LocalDateTime.now();
 

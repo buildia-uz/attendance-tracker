@@ -1,7 +1,7 @@
 package uz.buildia.attendancetracker.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import uz.buildia.attendancetracker.exception.EmployeeException;
 import uz.buildia.attendancetracker.model.request.AttendanceRecordCreateRequest;
 
 /**
@@ -21,9 +21,9 @@ public interface AttendanceRecordService {
      * based on the previous status of the employee for the current day and saves the attendance record.
      *
      * @param request the request containing information about the attendance record to be saved
-     * @throws EmployeeException if the employee information cannot be found
+     * @throws EntityNotFoundException if the employee information cannot be found
      * @see AttendanceRecordCreateRequest
      */
-    void saveAttendanceRecord(AttendanceRecordCreateRequest request) throws EmployeeException;
+    void saveAttendanceRecord(AttendanceRecordCreateRequest request) throws EntityNotFoundException;
 
 }
