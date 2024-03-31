@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'uz.buildia'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '21'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // mapper
+    implementation "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    implementation "org.mapstruct:mapstruct:1.5.5.Final"
+    compileOnly "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+
+    // lombok
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+
+    // DB
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // liquibase
+    implementation 'org.liquibase:liquibase-core'
+    implementation 'org.liquibase:liquibase-groovy-dsl:3.0.3'
+
+    // Tests
+    testCompileOnly "org.projectlombok:lombok"
+    testCompileOnly 'org.junit.jupiter:junit-jupiter-engine'
+    testAnnotationProcessor "org.projectlombok:lombok"
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation "org.assertj:assertj-core"
+    testImplementation "org.mockito:mockito-core"
+    testImplementation "org.mockito:mockito-junit-jupiter"
+    testImplementation 'com.h2database:h2'
+
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 02_attendance_record_table_create
+      author: NedUmarov
+      changes:
+        - createTable:
+            schemaName: attendance_tracker
+            tableName: attendance_record
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: employee_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: record_created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: true
+            primaryKey:
+              - columnNames: id
+            foreignKeyConstraints:
+              - foreignKeyConstraint:
+                  baseTableName: attendance_record
+                  baseColumnNames: employee_id
+                  referencedTableName: employee
+                  referencedColumnNames: id

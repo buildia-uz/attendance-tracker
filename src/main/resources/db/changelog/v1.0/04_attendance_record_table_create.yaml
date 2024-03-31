@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04_attendance_record_table_create
+      author: NedUmarov
+      changes:
+        - createSequence:
+            sequenceName: attendance_record_seq
