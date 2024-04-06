@@ -1,14 +1,13 @@
 <div id="reader"></div>
 
+<script src="config.js"></script>
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
-    const apiUrl = '%%API_URL%%';
     function onScanSuccess(decodedText, decodedResult) {
-        // Handle on success condition with the decoded text or result.
         console.log(`Code scanned = ${decodedText}`, decodedResult);
 
-        // Example: POST request with fetch API
-        fetch(apiUrl + '/api/record-attendance', {
+        // Use the backendApiUrl variable from config.js
+        fetch(backendApiUrl + '/api/v1/attendance-record', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,8 +22,6 @@
             console.error('Error:', error);
         });
     }
-
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", { fps: 10, qrbox: 250 });
+    var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
     html5QrcodeScanner.render(onScanSuccess);
 </script>
