@@ -2,12 +2,13 @@
 
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
+    const apiUrl = '%%API_URL%%';
     function onScanSuccess(decodedText, decodedResult) {
         // Handle on success condition with the decoded text or result.
         console.log(`Code scanned = ${decodedText}`, decodedResult);
 
         // Example: POST request with fetch API
-        fetch('/api/record-attendance', {
+        fetch(apiUrl + '/api/record-attendance', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

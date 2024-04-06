@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  attendance-db:
+    container_name: attendance-db
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: 'attendance_db'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'rootpassword'
+    ports:
+      - "3306:3306"
+    volumes:
+      - attendance-db-data:/var/lib/mysql
+    restart: always
+
+  attendance-tracker:
+    container_name: attendance-tracker:latest
+    image: attendance-tracker
+    environment:
+      DB_URL: jdbc:mysql://db:3306/attendance_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: admin
+      DB_PASSWORD: password
+      DB_DRIVER_CLASS_NAME: com.mysql.jdbc.Driver
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    restart: always
+
+  qr-scanner:
+    container_name: qr-scanner
+    image: qr-code-scanner:latest
+    ports:
+      - "80:80"
+    restart: always
+
+volumes:
+  attendance-db-data: { }
