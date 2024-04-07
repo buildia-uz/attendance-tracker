@@ -8,5 +8,7 @@ WORKDIR /app
 ARG JAR_FILE=build/libs/*.jar
 COPY ${JAR_FILE} at-app.jar
 
+EXPOSE 8081
+
 # Specify the entry point to run the jar
 ENTRYPOINT ["java", "-jar", "at-app.jar"]
