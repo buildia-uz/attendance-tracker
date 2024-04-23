@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import uz.buildia.attendancetracker.model.request.RequestData;
+import uz.buildia.attendancetracker.model.request.AttendanceRecordCreateRequest;
 import uz.buildia.attendancetracker.service.AttendanceRecordService;
 
 @Validated
@@ -18,8 +18,8 @@ public class AttendanceRecordController {
     private final AttendanceRecordService attendanceRecordService;
 
     @PostMapping
-    public ResponseEntity<Void> saveAttendanceRecord(@Valid RequestData request) {
-        attendanceRecordService.saveAttendanceRecord(request.getData());
+    public ResponseEntity<Void> saveAttendanceRecord(@Valid @RequestBody AttendanceRecordCreateRequest request) {
+        attendanceRecordService.saveAttendanceRecord(request);
         return ResponseEntity.ok().build();
     }
 
