@@ -20,6 +20,7 @@ import uz.buildia.attendancetracker.model.request.AttendanceRecordCreateRequest;
 import uz.buildia.attendancetracker.service.AttendanceRecordService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,9 +49,11 @@ class AttendanceRecordControllerTest {
     @ParameterizedTest(name = "{displayName} - [{index}] - Request: {0}")
     @ArgumentsSource(SuccessfulAttendanceRecordCreateRequestProvider.class)
     void testSaveAttendanceRecord_Successful(AttendanceRecordCreateRequest request) throws Exception {
+        String jsonContent = objectMapper.writeValueAsString(request);
         mockMvc.perform(post("/api/v1/attendance-record")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
+                        .content(jsonContent))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 

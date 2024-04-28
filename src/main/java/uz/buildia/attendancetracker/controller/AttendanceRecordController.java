@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import uz.buildia.attendancetracker.model.request.AttendanceRecordCreateRequest;
 import uz.buildia.attendancetracker.service.AttendanceRecordService;
 
@@ -15,6 +12,7 @@ import uz.buildia.attendancetracker.service.AttendanceRecordService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/attendance-record")
+@CrossOrigin(origins = "http://localhost")
 public class AttendanceRecordController {
 
     private final AttendanceRecordService attendanceRecordService;
