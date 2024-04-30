@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: attendance-tracker
+  jpa:
+    properties:
+      hibernate.jdbc.lob.non_contextual_creation: true
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
+    enabled: true
+  profiles:
+    active:
+      - ${ACTIVE_PROFILE_TEST:it}
+
+server:
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 10
+  port: 7001
+
+local-run: ${LOCAL_RUN:true}

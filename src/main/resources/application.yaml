@@ -14,10 +14,5 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.yaml
     enabled: true
 
-  spring:
-    jpa:
-      hibernate:
-        ddl-auto: none
-
 server:
   port: 8081

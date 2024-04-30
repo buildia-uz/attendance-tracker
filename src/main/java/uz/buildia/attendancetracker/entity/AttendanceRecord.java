@@ -1,4 +1,4 @@
-package uz.buildia.attendancetracker.model.entity;
+package uz.buildia.attendancetracker.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,13 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uz.buildia.attendancetracker.model.constants.AttendanceStatus;
+
+import java.time.LocalDateTime;
 
 /**
  * Represents a record of employee attendance in the system.

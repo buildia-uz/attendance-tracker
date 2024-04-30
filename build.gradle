@@ -1,56 +1,123 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.4'
-    id 'io.spring.dependency-management' version '1.1.4'
+    id 'jacoco'
+    id 'net.razvan.jacoco-to-cobertura' version "${jacocoToCoberturaVersion}"
+    id 'org.springframework.boot' version "${springBootVersion}"
+    id 'io.spring.dependency-management' version "${springDependencyPluginVersion}"
 }
 
 group = 'uz.buildia'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 java {
-    sourceCompatibility = '21'
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
 
 repositories {
     mavenCentral()
 }
 
+apply from: "$rootDir/gradle/config/${unitTest}.gradle"
+apply from: "$rootDir/gradle/config/${itTest}.gradle"
+
 dependencies {
+    // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // mapper
-    implementation "org.mapstruct:mapstruct-processor:1.5.5.Final"
-    implementation "org.mapstruct:mapstruct:1.5.5.Final"
-    compileOnly "org.mapstruct:mapstruct-processor:1.5.5.Final"
-    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.5.Final"
+    // Mapper
+    compileOnly("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
-    // lombok
-    compileOnly "org.projectlombok:lombok"
-    annotationProcessor "org.projectlombok:lombok"
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
     // DB
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'org.postgresql:postgresql'
 
-    // liquibase
+    // Liquibase
     implementation 'org.liquibase:liquibase-core'
-    implementation 'org.liquibase:liquibase-groovy-dsl:3.0.3'
+    implementation "org.liquibase:liquibase-groovy-dsl:${liquibaseGroovyDslVersion}"
 
-    // Tests
-    testCompileOnly "org.projectlombok:lombok"
-    testCompileOnly 'org.junit.jupiter:junit-jupiter-engine'
-    testAnnotationProcessor "org.projectlombok:lombok"
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation "org.assertj:assertj-core"
-    testImplementation "org.mockito:mockito-core"
-    testImplementation "org.mockito:mockito-junit-jupiter"
-    testImplementation 'com.h2database:h2'
+    unitTestCompileOnly 'org.projectlombok:lombok'
+    unitTestAnnotationProcessor 'org.projectlombok:lombok'
+    unitTestImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    itTestRuntimeOnly 'org.postgresql:postgresql'
+    itTestCompileOnly 'org.projectlombok:lombok'
+    itTestAnnotationProcessor 'org.projectlombok:lombok'
 
+    itTestImplementation 'org.testcontainers:postgresql'
+    itTestImplementation platform("org.testcontainers:testcontainers-bom:${testcontainersVersion}")
 
+    itTestImplementation 'org.springframework.boot:spring-boot-starter-test'
+    itTestImplementation "org.springframework.boot:spring-boot-starter-webflux"
+    itTestRuntimeOnly "io.netty:netty-resolver-dns-native-macos:${nettyResolver}:osx-aarch_64"
 }
 
-tasks.named('test') {
+tasks.withType(ProcessResources).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
+    testLogging {
+        events = ['passed', 'failed', 'skipped']
+        showStandardStreams = true
+    }
 }
+
+tasks.check.dependsOn(jacocoTestReport)
+
+jacoco {
+    toolVersion = "${jacocoVersion}"
+}
+
+jacocoTestReport {
+    dependsOn(tasks.named('jacocoUnitTestReport'), tasks.named('jacocoITTestReport'))
+
+    sourceSets sourceSets.main
+    executionData(tasks.test, tasks.named("${unitTest}"), tasks.named("${itTest}"))
+    getExecutionData().setFrom(fileTree(layout.buildDirectory)
+            .include("/jacoco/${unitTest}.exec")
+            .include("/jacoco/${itTest}.exec")
+    )
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    dependsOn(jacocoTestReport)
+    sourceSets sourceSets.main
+    executionData(tasks.test, tasks.named("${unitTest}"), tasks.named("${itTest}"))
+    getExecutionData().setFrom(fileTree(layout.buildDirectory)
+            .include("/jacoco/${unitTest}.exec")
+            .include("/jacoco/${itTest}.exec")
+    )
+
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.60
+            }
+        }
+    }
+}
+
+jacocoToCobertura {
+    inputFile.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
+    outputFile.set(layout.buildDirectory.file("reports/cobertura.xml"))
+    sourceDirectories.from(layout.projectDirectory.dir("src/main/java"))
+    splitByPackage.set(false)
+}
+

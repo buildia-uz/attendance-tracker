@@ -19,6 +19,6 @@ import lombok.Getter;
 public enum AttendanceStatus {
 
     ARRIVED,
-    LEFT;
+    LEFT
 
 }
