@@ -30,7 +30,7 @@ tasks.register('jacocoITTestReport', JacocoReport) {
     group = 'verification'
     description = "Generates code coverage report for the ${itTest} task."
 
-    sourceSets sourceSets."${itTest}"
+    sourceSets sourceSets.main
     executionData tasks.named("${itTest}")
     getExecutionData().setFrom(fileTree(layout.buildDirectory).include("/jacoco/${itTest}.exec"))
 
