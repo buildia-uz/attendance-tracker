@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AttendanceRecordControllerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">attendance-tracker</a> &gt; <a href="index.source.html" class="el_package">uz.buildia.attendancetracker.controller</a> &gt; <span class="el_source">AttendanceRecordControllerTest.java</span></div><h1>AttendanceRecordControllerTest.java</h1><pre class="source lang-java linenums">package uz.buildia.attendancetracker.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uz.buildia.attendancetracker.BaseUnitTest;
+import uz.buildia.attendancetracker.config.AttendanceControllerAdvice;
+import uz.buildia.attendancetracker.config.InvalidUsernameAttendanceRecordCreateRequestProvider;
+import uz.buildia.attendancetracker.config.NullAttendanceRecordCreateRequestProvider;
+import uz.buildia.attendancetracker.config.SuccessfulAttendanceRecordCreateRequestProvider;
+import uz.buildia.attendancetracker.model.request.AttendanceRecordCreateRequest;
+import uz.buildia.attendancetracker.service.AttendanceRecordService;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+<span class="fc" id="L25">class AttendanceRecordControllerTest extends BaseUnitTest {</span>
+
+    @Mock
+    private AttendanceRecordService attendanceRecordService;
+
+    @InjectMocks
+    private AttendanceRecordController attendanceRecordController;
+
+    @InjectMocks
+    private AttendanceControllerAdvice attendanceControllerAdvice;
+
+<span class="fc" id="L36">    private final ObjectMapper objectMapper = new ObjectMapper();</span>
+    private MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+<span class="fc" id="L41">        mockMvc = MockMvcBuilders.standaloneSetup(attendanceRecordController)</span>
+<span class="fc" id="L42">                .setControllerAdvice(attendanceControllerAdvice)</span>
+<span class="fc" id="L43">                .build();</span>
+<span class="fc" id="L44">    }</span>
+
+    @DisplayName(&quot;Successful attendance record saving&quot;)
+    @ParameterizedTest(name = &quot;{displayName} - [{index}] - Request: {0}&quot;)
+    @ArgumentsSource(SuccessfulAttendanceRecordCreateRequestProvider.class)
+    void testSaveAttendanceRecord_Successful(AttendanceRecordCreateRequest request) throws Exception {
+<span class="fc" id="L50">        String jsonContent = objectMapper.writeValueAsString(request);</span>
+<span class="fc" id="L51">        mockMvc.perform(post(&quot;/api/v1/attendance-record&quot;)</span>
+<span class="fc" id="L52">                        .contentType(MediaType.APPLICATION_JSON)</span>
+<span class="fc" id="L53">                        .content(jsonContent))</span>
+<span class="fc" id="L54">                .andDo(print())</span>
+<span class="fc" id="L55">                .andExpect(status().isOk());</span>
+<span class="fc" id="L56">    }</span>
+
+    @DisplayName(&quot;Failed attendance record saving due to null values&quot;)
+    @ParameterizedTest(name = &quot;{displayName} - [{index}] - Request: {0}&quot;)
+    @ArgumentsSource(NullAttendanceRecordCreateRequestProvider.class)
+    void testSaveAttendanceRecord_NullUsername(AttendanceRecordCreateRequest request) throws Exception {
+<span class="fc" id="L62">        mockMvc.perform(post(&quot;/api/v1/attendance-record&quot;)</span>
+<span class="fc" id="L63">                        .contentType(MediaType.APPLICATION_JSON)</span>
+<span class="fc" id="L64">                        .content(objectMapper.writeValueAsString(request)))</span>
+<span class="fc" id="L65">                .andExpect(status().isBadRequest());</span>
+<span class="fc" id="L66">    }</span>
+
+    @DisplayName(&quot;Failed attendance record saving due to invalid username&quot;)
+    @ParameterizedTest(name = &quot;{displayName} - [{index}] - Request: {0}&quot;)
+    @ArgumentsSource(InvalidUsernameAttendanceRecordCreateRequestProvider.class)
+    void testSaveAttendanceRecord_InvalidUsernameFormat(AttendanceRecordCreateRequest request) throws Exception {
+<span class="fc" id="L72">        mockMvc.perform(post(&quot;/api/v1/attendance-record&quot;)</span>
+<span class="fc" id="L73">                        .contentType(MediaType.APPLICATION_JSON)</span>
+<span class="fc" id="L74">                        .content(objectMapper.writeValueAsString(request)))</span>
+<span class="fc" id="L75">                .andExpect(status().isBadRequest()); // Check BadRequest status due to an invalid username format</span>
+<span class="fc" id="L76">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
