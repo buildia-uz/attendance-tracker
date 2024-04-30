@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Employee.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">attendance-tracker</a> &gt; <a href="index.source.html" class="el_package">uz.buildia.attendancetracker.entity</a> &gt; <span class="el_source">Employee.java</span></div><h1>Employee.java</h1><pre class="source lang-java linenums">package uz.buildia.attendancetracker.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * &lt;p&gt;
+ * Represents an employee in the system.
+ * Each employee is uniquely identified by their username.
+ * Username is basically user's phone number.
+ * &lt;/p&gt;
+ *
+ * &lt;p&gt;
+ * Employees data should be moved to separate service in the future, when other systems will be implemented.
+ * &lt;/p&gt;
+ */
+
+@Entity
+@Getter
+<span class="nc" id="L28">@Setter</span>
+<span class="pc" id="L29">@Builder</span>
+<span class="fc" id="L30">@NoArgsConstructor</span>
+<span class="fc" id="L31">@AllArgsConstructor</span>
+@Table(schema = &quot;attendance_tracker&quot;, name = &quot;employees&quot;)
+public class Employee {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="nc" id="L37">    private Long id;</span>
+
+    /**
+     * The username of the employee, which is typically the phone number.
+     * This username is used for user identification.
+     */
+<span class="nc" id="L43">    private String username;</span>
+
+<span class="nc" id="L45">    private String firstName;</span>
+<span class="nc" id="L46">    private String lastName;</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
