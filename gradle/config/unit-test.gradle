@@ -1,0 +1,40 @@
+configurations {
+    unitTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+    unitTestCompileOnly.extendsFrom(testCompileOnly)
+    unitTestImplementation.extendsFrom(testImplementation)
+    unitTestAnnotationProcessor.extendsFrom(testAnnotationProcessor)
+}
+
+sourceSets {
+    "${unitTest}" {
+        java {
+            compileClasspath += sourceSets.main.output + sourceSets.test.output
+            runtimeClasspath += sourceSets.main.output + sourceSets.test.output
+            srcDir file("${rootDir}/src/${unitTest}/java")
+        }
+        resources.srcDir file("${rootDir}/src/${unitTest}/resources")
+    }
+}
+
+tasks.register("${unitTest}", Test) {
+    group = 'verification'
+    description = 'Runs unit tests.'
+
+    testClassesDirs = sourceSets."${unitTest}".output.classesDirs
+    classpath = sourceSets."${unitTest}".runtimeClasspath
+}
+
+tasks.register('jacocoUnitTestReport', JacocoReport) {
+    dependsOn(tasks.named("${unitTest}"))
+    group = 'verification'
+    description = "Generates code coverage report for the ${unitTest} task."
+
+    sourceSets sourceSets.main
+    executionData tasks.named("${unitTest}")
+    getExecutionData().setFrom(fileTree(layout.buildDirectory).include("/jacoco/${unitTest}.exec"))
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}

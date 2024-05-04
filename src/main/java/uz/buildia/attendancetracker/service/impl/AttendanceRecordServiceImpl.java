@@ -1,18 +1,19 @@
 package uz.buildia.attendancetracker.service.impl;
 
 import jakarta.persistence.EntityNotFoundException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import uz.buildia.attendancetracker.model.constants.AttendanceStatus;
-import uz.buildia.attendancetracker.model.entity.AttendanceRecord;
-import uz.buildia.attendancetracker.model.entity.Employee;
+import uz.buildia.attendancetracker.entity.AttendanceRecord;
+import uz.buildia.attendancetracker.entity.Employee;
 import uz.buildia.attendancetracker.model.request.AttendanceRecordCreateRequest;
 import uz.buildia.attendancetracker.repository.AttendanceRecordRepository;
 import uz.buildia.attendancetracker.repository.EmployeeRepository;
 import uz.buildia.attendancetracker.service.AttendanceRecordService;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static uz.buildia.attendancetracker.model.constants.AttendanceStatus.ARRIVED;
 import static uz.buildia.attendancetracker.model.constants.AttendanceStatus.LEFT;
@@ -38,15 +39,17 @@ public class AttendanceRecordServiceImpl implements AttendanceRecordService {
                 .findPreviousStatus(request.username(), todayMidnight)
                 .orElse(LEFT);
 
-        AttendanceStatus status = switch (previousStatus) {
-            case ARRIVED -> LEFT;
-            default -> ARRIVED;
-        };
+        AttendanceStatus newStatus;
+        if (previousStatus == AttendanceStatus.ARRIVED) {
+            newStatus = LEFT;
+        } else {
+            newStatus = ARRIVED;
+        }
 
         AttendanceRecord saved = attendanceRecordRepository.save(AttendanceRecord.builder()
                 .employee(employee)
                 .location(request.location())
-                .status(status)
+                .status(newStatus)
                 .recordCreatedAt(recordCreatedAt)
                 .build());
 

@@ -1,4 +1,4 @@
-package uz.buildia.attendancetracker.model.entity;
+package uz.buildia.attendancetracker.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

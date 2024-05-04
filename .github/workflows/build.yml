@@ -1,0 +1,89 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ACTIVE_PROFILE_TEST: ci
+    services:
+      postgres:
+        image: postgres:13.4
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: attendance_db
+        ports:
+          - 5432:5432
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build
+      - name: Generate JaCoCo report
+        run: ./gradlew jacocoTestReport
+      - name: Publish JaCoCo report for Unit Tests
+        uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          name: jacoco-unit-test-report
+          path: build/reports/jacoco/jacocoUnitTestReport/html
+      - name: Publish JaCoCo report for Integration Tests
+        uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          name: jacoco-integration-test-report
+          path: build/reports/jacoco/jacocoITTestReport/html
+      - name: Publish JaCoCo report for all tests
+        uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          name: jacoco-report
+          path: build/reports/jacoco/test/html
+      - name: Convert JaCoCo XML to Cobertura XML
+        run: ./gradlew jacocoToCobertura
+      - uses: 5monkeys/cobertura-action@master
+        with:
+          path: build/reports/cobertura.xml
+          minimum_coverage: 60
+      - name: Deploy Unit Test Coverage to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/reports/jacoco/jacocoUnitTestReport/html
+          destination_dir: jacoco-unit-test-report
+      - name: Deploy IT Test Coverage to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/reports/jacoco/jacocoITTestReport/html
+          destination_dir: jacoco-integration-test-report
+      - name: Deploy Overall Test Coverage to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/reports/jacoco/test/html
+          destination_dir: jacoco-overall-report
+
+  dependency-submission:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@417ae3ccd767c252f5661f1ace9f835f9654f2b5
