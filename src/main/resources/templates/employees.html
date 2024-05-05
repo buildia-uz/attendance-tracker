@@ -1,27 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Employees</title>
+    <title>Master-Detail</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add custom CSS here */
+        .grid-wrapper {
+            margin-top: 20px;
+        }
+
+        .editor-layout {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        .important-checkbox {
+            margin-top: 10px;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 250px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #ddd;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+
+        .toggle-button {
+            margin-top: 10px;
+            float: right;
+        }
+    </style>
 </head>
+
 <body>
-<h1>Employee List</h1>
-<div>
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Phone</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="employee : ${employees}">
-            <td th:text="${employee.firstName} + ' ' + ${employee.lastName}">Name</td>
-            <td th:text="${employee.age}">Age</td>
-            <td th:text="${employee.phoneNumber}">Phone</td>
-        </tr>
-        </tbody>
-    </table>
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar">
+            <a href="/dashboard" class="btn btn-primary mt-3">Dashboard</a>
+            <div class="editor-layout collapse" id="editorLayout">
+                <!-- Editor form here -->
+                <form th:action="@{/save}" method="post">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" required>
+                        <label for="firstName">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" required>
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                    </div>
+                    <!-- Add other form fields -->
+                    <button type="submit" class="btn btn-primary mt-3">Save</button>
+                </form>
+            </div>
+            <button class="btn btn-secondary mt-3 toggle-button" type="button" data-toggle="collapse" data-target="#editorLayout" aria-expanded="false" aria-controls="editorLayout">Add User</button>
+        </div>
+        <div class="col-md-6 content">
+            <div class="grid-wrapper">
+                <!-- Grid here -->
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Phone</th>
+                        <th>Attendance time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Iterate over sample persons and populate the table -->
+                    <tr th:each="samplePerson : ${samplePersons}">
+                        <td th:text="${samplePerson.firstName}"></td>
+                        <td th:text="${samplePerson.lastName}"></td>
+                        <td th:text="${samplePerson.phone}"></td>
+                        <td th:text="${samplePerson.attendanceTime}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
