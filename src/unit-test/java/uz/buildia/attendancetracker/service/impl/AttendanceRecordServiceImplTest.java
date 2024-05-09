@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uz.buildia.attendancetracker.model.constants.AttendanceStatus.ARRIVED;
-import static uz.buildia.attendancetracker.model.constants.AttendanceStatus.LEFT;
+import static uz.buildia.attendancetracker.constants.AttendanceStatus.ARRIVED;
+import static uz.buildia.attendancetracker.constants.AttendanceStatus.LEFT;
 
 class AttendanceRecordServiceImplTest extends BaseUnitTest {
 

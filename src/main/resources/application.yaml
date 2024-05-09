@@ -9,6 +9,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        hibernate.default_schema: attendance_tracker
 
   liquibase:
     change-log: classpath:/db/changelog/db.changelog-master.yaml

@@ -14,7 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uz.buildia.attendancetracker.model.constants.AttendanceStatus;
+import uz.buildia.attendancetracker.constants.AttendanceStatus;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +29,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "attendance_tracker", name = "attendance_record")
+@Table(name = "attendance_record")
 public class AttendanceRecord {
 
     @Id

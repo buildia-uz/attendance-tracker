@@ -1,4 +1,4 @@
-package uz.buildia.attendancetracker.model.constants;
+package uz.buildia.attendancetracker.constants;
 
 import lombok.Getter;
 

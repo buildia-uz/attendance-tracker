@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import uz.buildia.attendancetracker.BaseIT;
 import uz.buildia.attendancetracker.entity.AttendanceRecord;
 import uz.buildia.attendancetracker.entity.Employee;
-import uz.buildia.attendancetracker.model.constants.AttendanceStatus;
+import uz.buildia.attendancetracker.constants.AttendanceStatus;
 import uz.buildia.attendancetracker.model.request.AttendanceRecordCreateRequest;
 import uz.buildia.attendancetracker.repository.AttendanceRecordRepository;
 import uz.buildia.attendancetracker.repository.EmployeeRepository;

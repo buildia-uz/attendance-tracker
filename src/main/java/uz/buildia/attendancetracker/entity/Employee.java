@@ -29,7 +29,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(schema = "attendance_tracker", name = "employees")
+@Table(name = "employees")
 public class Employee {
 
     @Id

@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import uz.buildia.attendancetracker.model.constants.AttendanceStatus;
+import uz.buildia.attendancetracker.constants.AttendanceStatus;
 import uz.buildia.attendancetracker.entity.AttendanceRecord;
 import uz.buildia.attendancetracker.entity.Employee;
 import uz.buildia.attendancetracker.model.request.AttendanceRecordCreateRequest;
@@ -15,8 +15,8 @@ import uz.buildia.attendancetracker.service.AttendanceRecordService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static uz.buildia.attendancetracker.model.constants.AttendanceStatus.ARRIVED;
-import static uz.buildia.attendancetracker.model.constants.AttendanceStatus.LEFT;
+import static uz.buildia.attendancetracker.constants.AttendanceStatus.ARRIVED;
+import static uz.buildia.attendancetracker.constants.AttendanceStatus.LEFT;
 
 @Slf4j
 @Service

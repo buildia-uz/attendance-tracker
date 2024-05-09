@@ -29,9 +29,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // Mapper
-    compileOnly("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+    implementation "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
 
     // Lombok
@@ -44,6 +47,11 @@ dependencies {
     // Liquibase
     implementation 'org.liquibase:liquibase-core'
     implementation "org.liquibase:liquibase-groovy-dsl:${liquibaseGroovyDslVersion}"
+
+    // Jwt
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    implementation "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+    implementation "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
 
     unitTestCompileOnly 'org.projectlombok:lombok'
     unitTestAnnotationProcessor 'org.projectlombok:lombok'
@@ -120,4 +128,3 @@ jacocoToCobertura {
     sourceDirectories.from(layout.projectDirectory.dir("src/main/java"))
     splitByPackage.set(false)
 }
-

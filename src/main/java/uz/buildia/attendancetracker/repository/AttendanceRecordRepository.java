@@ -3,7 +3,7 @@ package uz.buildia.attendancetracker.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import uz.buildia.attendancetracker.model.constants.AttendanceStatus;
+import uz.buildia.attendancetracker.constants.AttendanceStatus;
 import uz.buildia.attendancetracker.entity.AttendanceRecord;
 
 import java.time.LocalDateTime;
